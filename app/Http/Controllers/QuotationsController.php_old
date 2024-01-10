@@ -1,0 +1,109 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Quotations;
+use App\Models\QuotationsDetail;
+use App\Http\Requests\StoreQuotationsRequest;
+use App\Http\Requests\UpdateQuotationsRequest;
+use Illuminate\Http\Request;
+
+class QuotationsController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        return view('quotations.index');
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+
+        return view('quotations.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+
+        echo "<pre>";
+        print_r($request->all());
+        echo "</pre>";
+        $files = $request->file('images');
+        echo "<pre>";
+//        print_r($files);
+        echo "</pre>";
+        exit();
+        echo "<pre>";
+        print_r($request->all());
+        echo "</pre>";
+        exit();
+        $json = $_POST["cellValues"];
+
+        $images_json = $_POST["images"];
+        $images = json_decode($images_json, true);
+
+        // Convert the JSON data to a PHP array
+        $cellValues = json_decode($json, true);
+        echo "<pre>";
+        print_r($cellValues);
+        echo "</pre>";
+        exit();
+    }
+
+    /**
+     * Search HSN
+     * @author Rajdipsinh Hada
+    */
+
+    public function search_hsn(Request $request)
+    {
+        $status = false;
+        $json_response = array();
+        $quotation_details_by_hsn = QuotationsDetail::Where('hsn_code', 'like', $request->hsn_code . '%')->first();
+        if(!empty($quotation_details_by_hsn) && $quotation_details_by_hsn != '') {
+            $status = true;
+            $json_response = $quotation_details_by_hsn;
+        }
+        return response()->json(array('status' => $status, 'json_response' => $json_response));
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Quotations $quotations)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Quotations $quotations)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(UpdateQuotationsRequest $request, Quotations $quotations)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Quotations $quotations)
+    {
+        //
+    }
+}
